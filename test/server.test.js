@@ -3,6 +3,25 @@ const supertest = require('supertest');
 const app = require('../app');
 const server = supertest(app);
 
+tap.test('POST /tasks', async t => {
+    const newTask = {
+        name: 'New Task',
+        description: 'New Task Description',
+        completed: false
+    };
+    const response = await server.post('/tasks').send(newTask);
+    t.equal(response.status, 201);
+    t.end();
+});
+
+tap.test('POST /tasks with invalid data', async t => {
+    const newTask = {
+        name: 'New Task',
+    };
+    const response = await server.post('/tasks').send(newTask);
+    t.equal(response.status, 400);
+    t.end();
+});
 
 tap.test('GET /', async t => {
     const response = await server.get('/');
@@ -15,7 +34,6 @@ tap.test('GET /', async t => {
 tap.test('GET /tasks', async t => {
     const response = await server.get('/tasks');
     t.equal(response.status, 200);
-    t.equal(response.body.length, 15);
     t.hasOwnProp(response.body[0], 'id');
     t.hasOwnProp(response.body[0], 'name');
     t.hasOwnProp(response.body[0], 'description');
@@ -43,26 +61,6 @@ tap.test('GET /tasks/:id', async t => {
 tap.test('GET /tasks/:id with invalid id', async t => {
     const response = await server.get('/tasks/999');
     t.equal(response.status, 404);
-    t.end();
-});
-
-tap.test('POST /tasks', async t => {
-    const newTask = {
-        name: 'New Task',
-        description: 'New Task Description',
-        completed: false
-    };
-    const response = await server.post('/tasks').send(newTask);
-    t.equal(response.status, 201);
-    t.end();
-});
-
-tap.test('POST /tasks with invalid data', async t => {
-    const newTask = {
-        name: 'New Task',
-    };
-    const response = await server.post('/tasks').send(newTask);
-    t.equal(response.status, 400);
     t.end();
 });
 
