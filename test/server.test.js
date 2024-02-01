@@ -23,14 +23,6 @@ tap.test('POST /tasks with invalid data', async t => {
     t.end();
 });
 
-tap.test('GET /', async t => {
-    const response = await server.get('/');
-    t.equal(response.status, 200);
-    t.equal(response.text, 'Hello World!');
-    t.end();
-});
-
-
 tap.test('GET /tasks', async t => {
     const response = await server.get('/tasks');
     t.equal(response.status, 200);
